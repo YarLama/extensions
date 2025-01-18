@@ -1,0 +1,13 @@
+{
+    "manifest_version": 3,
+    "name": "chatgpt-keyboard-navigation",
+    "version": "1.0.0",
+    "description": "extension for enable keyboard navigation for chatgpt free version.",
+    "content_scripts": [
+        {
+            "matches": ["https://chatgpt.com/c/*"],
+            "js": ["index.js"],
+            "run_at": "document_end"
+        }
+    ]
+}
