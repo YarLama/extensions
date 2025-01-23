@@ -210,7 +210,6 @@
       let isFile = document.querySelector("div.react-code-size-details-banner");
 
       if (!isDownloadElementExist() && !isFile) {
-        console.log("hui", isZipDownloading);
         createDownloadElement(a_li_d, clickDownloadHandler, isZipDownloading);
       }
     };
