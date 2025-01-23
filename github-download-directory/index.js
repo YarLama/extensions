@@ -21,6 +21,7 @@
       dark_dimmed: "hViPfw",
     },
   };
+  let isZipDownloading = false;
 
   const getFilesFromRepoZip = async function (repoUrl) {
     const parseUrlPathName = (urlPathname) => {
@@ -58,7 +59,8 @@
     const urlObj = parseUrlPathName(new URL(repoUrl).pathname);
     const zipDownloadRef = `https://github.com/${urlObj.owner}/${urlObj.repo}/archive/refs/heads/${urlObj.tree}.zip`;
 
-    disableDownloadElement(true);
+    isZipDownloading = true;
+    disableDownloadElement(isZipDownloading);
 
     chrome.runtime.sendMessage(
       { action: "fetchZip", url: zipDownloadRef },
@@ -86,7 +88,8 @@
           throw new Error(`Download error: "${responce.error}"`);
         }
 
-        disableDownloadElement(false);
+        isZipDownloading = false;
+        disableDownloadElement(isZipDownloading);
       },
     );
   };
@@ -95,7 +98,7 @@
     getFilesFromRepoZip(window.location.href);
   };
 
-  const createDownloadElement = (divider, clickHandler) => {
+  const createDownloadElement = (divider, clickHandler, isDataFetching) => {
     let fragment = document.createDocumentFragment();
     let newDivider = divider.cloneNode(false);
     let downloadLi = document.createElement("li");
@@ -109,7 +112,6 @@
       "download_element",
     ].join(" ");
     downloadLi.role = "menuitem";
-    downloadLi.style.setProperty("list-style-type", "none");
 
     downloadElement.classList = [
       "Box-sc-g0xbh4-0",
@@ -120,11 +122,20 @@
     downloadElement.role = "menuitem";
     downloadElement.sx = "[object Object]";
 
-    downloadLi.append(downloadElement);
+    if (isDataFetching) {
+      downloadLi.setAttribute("aria-disabled", "true");
+      downloadElement.role = "none";
+      downloadLi.style.pointerEvents = "none";
+      downloadLi.style.cursor = "not-allowed";
+      downloadLi.style.color = "grey";
+      downloadDiv.textContent = downloadELementFetchingText;
+    } else {
+      downloadDiv.textContent = downloadElementText;
+    }
 
-    downloadDiv.textContent = downloadElementText;
     downloadDiv.classList = ["Box-sc-g0xbh4-0", "fFwzwX"].join(" ");
 
+    downloadLi.append(downloadElement);
     downloadElement.append(downloadDiv);
 
     fragment.append(downloadLi);
@@ -199,7 +210,8 @@
       let isFile = document.querySelector("div.react-code-size-details-banner");
 
       if (!isDownloadElementExist() && !isFile) {
-        createDownloadElement(a_li_d, clickDownloadHandler);
+        console.log("hui", isZipDownloading);
+        createDownloadElement(a_li_d, clickDownloadHandler, isZipDownloading);
       }
     };
   };
