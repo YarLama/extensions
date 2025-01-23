@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "github-download-directory",
+  "version": "1.0.0",
+  "description": "extension for download directory from repositories",
+  "host_permissions": ["https://github.com/*", "https://codeload.github.com/*"],
+  "background": {
+    "service_worker": "./background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://github.com/*/*/tree/*/*"],
+      "js": ["./utils/fflate.js", "index.js"],
+      "run_at": "document_end"
+    }
+  ]
+}
