@@ -2,6 +2,25 @@
   const { unzipSync, zipSync } = fflate;
   const downloadElementText = "Download directory";
   const downloadELementFetchingText = "Downloading...";
+  const html = document.documentElement;
+  const colorMode = html.getAttribute("data-color-mode");
+  const lightTheme = html.getAttribute("data-light-theme");
+  const darkTheme = html.getAttribute("data-dark-theme");
+  const classTheme = {
+    light: {
+      light: "itAoNO",
+      light_high_contrast: "IHKDc",
+      light_colorblind: "esmSWX",
+      light_tritanopia: "esmSWX",
+    },
+    dark: {
+      dark: "bCWJNG",
+      dark_high_contrast: "faAMPl",
+      dark_colorblind: "dqXGJn",
+      dark_tritanopia: "dqXGJn",
+      dark_dimmed: "hViPfw",
+    },
+  };
 
   const getFilesFromRepoZip = async function (repoUrl) {
     const parseUrlPathName = (urlPathname) => {
@@ -82,15 +101,15 @@
     let downloadLi = document.createElement("li");
     let downloadElement = document.createElement("a");
     let downloadDiv = document.createElement("div");
-
     fragment.append(newDivider);
 
     downloadLi.classList = [
       "Item__LiBox-sc-yeql7o-0",
-      "itAoNO",
+      classTheme[colorMode][colorMode === "light" ? lightTheme : darkTheme],
       "download_element",
     ].join(" ");
-    downloadLi.role = "none";
+    downloadLi.role = "menuitem";
+    downloadLi.style.setProperty("list-style-type", "none");
 
     downloadElement.classList = [
       "Box-sc-g0xbh4-0",
