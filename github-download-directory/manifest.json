@@ -5,12 +5,12 @@
   "description": "extension for download directory from repositories",
   "host_permissions": ["https://github.com/*", "https://codeload.github.com/*"],
   "background": {
-    "service_worker": "./background.js"
+    "service_worker": "background.js"
   },
   "content_scripts": [
     {
       "matches": ["https://github.com/*/*/tree/*/*"],
-      "js": ["./utils/fflate.js", "index.js"],
+      "js": ["index.js"],
       "run_at": "document_end"
     }
   ]

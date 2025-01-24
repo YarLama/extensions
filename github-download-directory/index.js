@@ -1,5 +1,5 @@
 (function () {
-  const { unzipSync, zipSync } = fflate;
+  // const { unzipSync, zipSync } = fflate;
   const downloadElementText = "Download directory";
   const downloadELementFetchingText = "Downloading...";
   const html = document.documentElement;
@@ -63,19 +63,11 @@
     disableDownloadElement(isZipDownloading);
 
     chrome.runtime.sendMessage(
-      { action: "fetchZip", url: zipDownloadRef },
+      { action: "fetchZip", url: zipDownloadRef, parsingUrlObject: urlObj },
       (responce) => {
         if (responce.success) {
           const zipData = new Uint8Array(responce.data);
-          const unzipped = unzipSync(zipData);
-          const targetPath = `${urlObj.repo}-${urlObj.tree}/${urlObj.path}`;
-          const filteredData = getFilteredFiles(
-            unzipped,
-            targetPath,
-            urlObj.lastPart,
-          );
-          const newZip = zipSync(filteredData);
-          const blob = new Blob([newZip], { type: "application/zip" });
+          const blob = new Blob([zipData], { type: "application/zip" });
           const downloadNewZipUrl = URL.createObjectURL(blob);
           const a = document.createElement("a");
           a.href = downloadNewZipUrl;
@@ -84,12 +76,14 @@
           a.click();
           document.body.removeChild(a);
           URL.revokeObjectURL(downloadNewZipUrl);
+          isZipDownloading = false;
+          disableDownloadElement(isZipDownloading);
         } else {
+          isZipDownloading = false;
+          disableDownloadElement(isZipDownloading);
           throw new Error(`Download error: "${responce.error}"`);
         }
 
-        isZipDownloading = false;
-        disableDownloadElement(isZipDownloading);
       },
     );
   };
