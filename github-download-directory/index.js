@@ -170,6 +170,7 @@
 
   const handlePortalMutation = function (targetElement) {
     return function () {
+      let isA = document.querySelector('ul[aria-label="View options"]')
       let a_ul = targetElement.querySelector("ul");
       if (!a_ul) return;
 
@@ -179,7 +180,7 @@
       if (!a_li_d) return;
       let isFile = document.querySelector("div.react-code-size-details-banner");
 
-      if (!isDownloadElementExist() && !isFile) {
+      if (!isDownloadElementExist() && !isFile && isA) {
         createDownloadElement(a_li_d, clickDownloadHandler, isZipDownloading);
       }
     };
