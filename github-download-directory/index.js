@@ -1,5 +1,4 @@
 (function () {
-  // const { unzipSync, zipSync } = fflate;
   const downloadElementText = "Download directory";
   const downloadELementFetchingText = "Downloading...";
   const html = document.documentElement;
@@ -35,27 +34,6 @@
       };
     };
 
-    const getFilteredFiles = function (
-      unzipData,
-      path,
-      directoryForCollectionName,
-    ) {
-      const filteredFiles = {};
-      for (const [filePath, fileContent] of Object.entries(unzipData)) {
-        if (filePath.startsWith(path)) {
-          const newPath = filePath.slice(path.length);
-          if (newPath) {
-            filteredFiles[
-              directoryForCollectionName
-                ? `${directoryForCollectionName}${newPath}`
-                : newPath
-            ] = fileContent;
-          }
-        }
-      }
-      return filteredFiles;
-    };
-
     const urlObj = parseUrlPathName(new URL(repoUrl).pathname);
     const zipDownloadRef = `https://github.com/${urlObj.owner}/${urlObj.repo}/archive/refs/heads/${urlObj.tree}.zip`;
 
@@ -76,14 +54,12 @@
           a.click();
           document.body.removeChild(a);
           URL.revokeObjectURL(downloadNewZipUrl);
-          isZipDownloading = false;
-          disableDownloadElement(isZipDownloading);
         } else {
-          isZipDownloading = false;
-          disableDownloadElement(isZipDownloading);
-          throw new Error(`Download error: "${responce.error}"`);
+          console.error(`Download error: "${responce.error}"`);
         }
 
+        isZipDownloading = false;
+        disableDownloadElement(isZipDownloading);
       },
     );
   };
