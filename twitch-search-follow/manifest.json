@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "twitch-search-follow",
+  "version": "1.0.0",
+  "description": "extension for twitch. Added search of follow.",
+  "content_scripts": [
+    {
+      "matches": ["https://www.twitch.tv/*"],
+      "js": ["index.js"],
+      "run_at": "document_end"
+    }
+  ]
+}
