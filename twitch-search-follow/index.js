@@ -48,12 +48,18 @@
       let channels = targetEl.children;
       for (let i = 1; i < channels.length; i++) {
         let name = channels[i].querySelector(
-          "div.side-nav-card__title > p",
-        ).innerText;
-        if (name.toLowerCase().includes(e.target.value.toLowerCase())) {
-          channels[i].style.display = "block";
-        } else {
-          channels[i].style.display = "none";
+          "p.CoreText-sc-1txzju1-0",
+        );
+        if (name) {
+          if (
+            name.textContent
+              .toLowerCase()
+              .includes(e.target.value.toLowerCase())
+          ) {
+            channels[i].style.display = "block";
+          } else {
+            channels[i].style.display = "none";
+          }
         }
       }
     };
